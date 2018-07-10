@@ -1,0 +1,189 @@
+<div class="row panel " ng-controller="clientUpdateController" ng-init="init()">
+<fieldset>
+<legend>Gestionar Cliente</legend>
+
+  <div class="text-center">
+    <img ng-show="isLoading" src="img/loader-big.gif">
+  </div>
+  <form ng-hide="isLoading" name="formModel" novalidate="" class="form-horizontal">
+
+  <div class="col-md-6">
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="textinput">Nombre del Edificio</label>
+      <div class="col-md-6">
+          <input ng-model="element.selected.name" type="text" class="form-control" maxlength="35" required placeholder="Nombre" />
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="textinput">Tipo</label>
+      <div class="col-md-6">
+          <select ng-model="element.selected.id_client_type" class="form-control" required ng-options="clientType.id as clientType.name for clientType in clientTypes">
+            <option value="">Elegir...</option>
+          </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="textinput">Teléfonos</label>
+      <div class="col-md-6">
+          <textarea ng-model="element.selected.phone" class="form-control" maxlength="1024" placeholder="Teléfonos"></textarea>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="textinput">Observación</label>
+      <div class="col-md-6">
+          <textarea ng-model="element.selected.description" class="form-control" maxlength="1024" placeholder="Observaciones del Cliente."></textarea>
+      </div>
+    </div>
+
+
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="textinput">País</label>
+      <div class="col-md-6">
+          <select ng-model="element.selected.id_country" ng-change="loadStates(element.selected.id_country, this)" ng-options="country.id as country.name for country in countries" class="form-control">
+            <option value="">Elegir...</option>
+          </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="textinput">Provincia</label>
+      <div class="col-md-6">
+          <select ng-model="element.selected.id_state" ng-change="loadCities(element.selected.id_state, this)" ng-options="state.id as state.name for state in states" class="form-control">
+            <option value="">Elegir...</option>
+          </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="textinput">Ciudad</label>
+      <div class="col-md-6">
+          <select ng-model="element.selected.id_city" class="form-control" ng-options="city.id as city.name for city in cities">
+            <option value="">Elegir...</option>
+          </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="textinput">Dirección</label>
+      <button ng-click="searchAddress(element)" class="btn btn-primary">
+        <span class="glyphicon glyphicon-search"></span>
+      </button>
+      <img ng-show="isLoadingMap" src="img/loader-small.gif" />
+      <div class="col-md-6">
+          <input ng-model="element.selected.address" ng-change="onChangeAddress(element)" type="text" class="form-control" maxlength="40" placeholder="Dirección" />
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="textinput">Código Postal</label>
+      <div class="col-md-6">
+          <input ng-model="element.selected.zip_code" type="text" class="form-control" maxlength="10" placeholder="Código Postal" />
+      </div>
+    </div>
+
+  </div>
+
+  <div class="col-md-6">
+    <div class="form-group" id="form-map">
+      <ui-gmap-google-map center='map.center' zoom='map.zoom' events='map.events'>
+        <ui-gmap-marker coords="marker.coords" options="marker.options" events="marker.events" idkey="marker.id" />
+      </ui-gmap-google-map>
+    </div>
+  </div>
+
+  <div class="col-md-12">
+      <div class="col-md-6">
+        <table class="table table-striped table-bordered">
+          <thead>
+            <tr>
+              <th class="col-md-2">Administradores</th>
+              <th class="col-md-3">Teléfonos</th>
+              <th class="col-md-3">eMail</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="element in temp_administrators">
+              <td>
+                <a href="#/administrator/update?id={{element.idAdministrator.id}}">{{element.idAdministrator.first_name}} {{element.idAdministrator.last_name}}</a>
+              </td>
+              <td><pre>{{element.idAdministrator.phone}}</pre></td>
+              <td><a href="mailTo:{{element.idAdministrator.email}}">{{element.idAdministrator.email}}</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="col-md-6">
+        <table class="table table-striped table-bordered">
+          <thead>
+            <tr>
+              <th class="col-md-2">Ingenieros</th>
+              <th class="col-md-3">Teléfonos</th>
+              <th class="col-md-3">eMail</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="element in temp_engineers">
+              <td>
+                <a href="#/engineer/update?id={{element.id}}">{{element.idEngineer.first_name}} {{element.idEngineer.last_name}}</a>
+              </td>
+              <td><pre>{{element.idEngineer.phone}}</pre></td>
+              <td><a href="mailTo:{{element.idEngineer.email}}">{{element.idEngineer.email}}</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+  </div>
+
+  <div class="col-md-12">
+      <div class="col-md-12">
+        <table class="table table-striped table-bordered">
+          <thead>
+            <tr>
+              <th class="col-md-2">Ascensores</th>
+              <th class="col-md-4">Descripción</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="element in temp_elevators">
+              <td>{{element.name}}</td>
+              <td>{{element.description}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+  </div>
+
+  <div class="col-md-12">
+    <div class=" pull-right">
+      <img ng-show="element.$$isUpdating" src="img/loader-small.gif" />
+      <button ng-click="save(element)" ng-disabled="element.$$isUpdating" class="btn btn-success">
+        <span class="glyphicon glyphicon-ok"></span> Guardar
+      </button>
+      <button ng-click="cancel()" ng-disabled="element.$$isUpdating" class="btn btn-danger">
+        <span class="glyphicon glyphicon-remove"></span> Cancelar
+      </button>
+    </div>
+  </div>
+
+</form>
+</fieldset>
+</div>
+
+
+<div ng-include="'js/app/views/elevator/search.html'"></div>
+
+<div class="row">
+  <div ng-include="'js/app/views/engineer/client.html'"></div>
+  <div ng-include="'js/app/views/administrator/client.html'"></div>
+</div>
+
+<div ng-include="'js/app/views/ticket/client.html'"></div>
+<div ng-include="'js/app/views/ticket/clientToDo.html'"></div>
+
+<div ng-include="'js/app/views/accountingEntry/client.html'"></div>
+<div ng-include="'js/app/views/accountingEntry/clientDue.html'"></div>
+<div ng-include="'js/app/views/upload/upload.html'"></div>

@@ -1,0 +1,23 @@
+<div class="row panel" id="engineer" ng-controller="reportEngineerController" ng-init="init()">
+  <fieldset>
+  <legend>Ingenieros con más Clientes asignados.</legend>
+
+  <form ng-model="formModel" novalidate="">
+
+      <div class="col-sm-9 form-inline">
+        <p>Este reporte representa la cantidad de clientes asignados por técnico.</p>
+      </div>
+
+      <div class="col-sm-3 form-inline pull-right">
+        <div ng-repeat="label in labels">
+          <span id="credit-reference" style="background:{{ getColor($index) }}"></span>
+          <span> {{label}} ({{totalResults[$index]}})</span>
+        </div>
+      </div>
+
+      <div style="width: 80%">
+        <canvas id="canvas" height="450" width="1000"></canvas>
+      </div>
+    </fieldset>
+  </form>
+</div>

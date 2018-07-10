@@ -1,0 +1,40 @@
+<div class="row panel" id="clientBalance" ng-controller="reportClientBalanceController" ng-init="init()">
+  <fieldset>
+  <legend>Ingresos por Clientes.</legend>
+
+  <form ng-model="formModel" novalidate="">
+      <div class="col-sm-9 form-inline">
+        <div class="form-group">
+          <span>Fecha Inicial:</span>
+
+          <p class="input-group">
+            <input type="text" class="form-control" datepicker-popup="dd/MM/yyyy" ng-model="initDate" is-open="initDate_isOpened" close-text="Salir" current-text="Hoy" clear-text="Cancelar" cs-date-to-iso />
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-default" ng-click="initDate_isOpened=!$event.stopPropagation()"><i class="glyphicon glyphicon-calendar"></i></button>
+            </span>
+          </p>
+
+        </div>
+        <div class="form-group col-md-offset-1">
+          <span>Fecha Final:</span>
+
+          <p class="input-group">
+            <input type="text" class="form-control" datepicker-popup="dd/MM/yyyy" ng-model="endDate" is-open="endDate_isOpened" close-text="Salir" current-text="Hoy" clear-text="Cancelar" cs-date-to-iso />
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-default" ng-click="endDate_isOpened=!$event.stopPropagation()"><i class="glyphicon glyphicon-calendar"></i></button>
+          <button class="btn btn-primary" ng-click="loadPage()"><span class="glyphicon glyphicon-search"></span></button>
+            </span>
+          </p>
+          <span><img ng-show="isLoading" src="img/loader-small.gif"></span>
+
+        </div>
+      </div>
+      <div class="col-sm-9 form-inline">
+        <p>Cifras expresadas en pesos argentinos.</p>
+      </div>
+      <div style="width: 80%">
+        <canvas id="canvas" height="450" width="1000"></canvas>
+      </div>
+    </fieldset>
+  </form>
+</div>
